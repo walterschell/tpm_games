@@ -1,0 +1,22 @@
+#!/bin/sh
+TPM_DEVICE=/dev/tpm0
+TPM_REGISTER=0x81000000
+TPM_SEAL_POLICY=pcr:sha256:0,1,2,7
+
+if [ -z $CRYPTTAB_TRIED ]; then
+    export CRYPTTAB_TRIED=0
+fi
+
+#export TPM2TOOLS_TCTI="device:$TPM_DEVICE"
+if [ "$CRYPTTAB_TRIED" -eq 0 ]; then
+    echo "Unlocking via TPM" >&2
+    /usr/bin/tpm2_unseal -c $TPM_REGISTER -p $TPM_SEAL_POLICY 
+    UNSEAL_STATUS=$?
+    echo "Unseal status $UNSEAL_STATUS" >&2
+    if [ $UNSEAL_STATUS -eq 0 ]; then
+        exit
+    fi
+else
+    echo "TPM unlocking previously failed for $CRYPTTAB_SOURCE ($CRYPTTAB_NAME)" >&2
+    /lib/cryptsetup/askpass "Enter passphrase for $CRYPTTAB_SOURCE ($CRYPTTAB_NAME): "
+fi
