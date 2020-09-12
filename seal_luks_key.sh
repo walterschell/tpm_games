@@ -23,6 +23,9 @@ echo "Loading object..."
 sudo tpm2_load -C primary.context -u obj.pub -r obj.priv -c load.context -T device:/dev/tpmrm0
 sudo tpm2_getcap handles-transient -T device:/dev/tpmrm0
 
+echo "Removing old object if any.."
+# Removes old contents of the handle
+sudo tpm2_evictcontrol -c 0x81000000 || echo "Handle did not exist"
 
 echo "Persisting object..."
 # Persists to Owner hierarchy in well known handle 0x81000000
