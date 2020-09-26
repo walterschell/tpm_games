@@ -15,7 +15,7 @@ echo "Creating object..."
 # adminwithpolicy - Only allow policy based authorization, no password
 # fixedparent - Do not allow tpm2_duplicate
 # fixedtpm - Do not allow duplication onto another tpm
-sudo tpm2_create -C primary.context -u obj.pub -r obj.priv -L policy.digest -a "noda|adminwithpolicy|fixedparent|fixedtpm" -i /root/secret.bin -T device:/dev/tpmrm0
+sudo tpm2_create -C primary.context -u obj.pub -r obj.priv -L policy.digest -a "noda|adminwithpolicy|fixedparent|fixedtpm" -i secret.txt -T device:/dev/tpmrm0
 
 
 echo "Loading object..."
@@ -36,3 +36,4 @@ echo "Verifying"
 sudo tpm2_getcap handles-persistent -T device:/dev/tpmrm0
 sudo tpm2_readpublic -c 0x81000000 -T device:/dev/tpmrm0
 
+echo "Sealed" > seal

@@ -1,4 +1,5 @@
 #!/bin/sh
+# Install to /usr/local/bin/passphrase-from-tpm
 TPM_DEVICE=/dev/tpm0
 TPM_REGISTER=0x81000000
 TPM_SEAL_POLICY=pcr:sha256:0,1,2,7
